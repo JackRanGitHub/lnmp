@@ -1,0 +1,20 @@
+FROM php:7.3-fpm
+
+# Installing php extensions
+RUN apt-get update && apt-get install -y libfreetype6-dev libjpeg62-turbo-dev libpng-dev libzip-dev
+
+# Removing the rest of apt cache
+RUN rm -rf /var/lib/apt/lists
+
+# Enabling php extensions
+RUN docker-php-ext-install mysqli sockets bcmath \
+    && docker-php-ext-configure gd --with-freetype-dir=/usr/include/ --with-jpeg-dir=/usr/include/ \
+    && docker-php-ext-install gd
+
+RUN docker-php-ext-enable gd mysqli sockets bcmath
+
+RUN pecl install redis-5.3.5 \
+    && pecl install xdebug-3.1.2 \
+    && docker-php-ext-enable redis xdebug
+
+EXPOSE 9000

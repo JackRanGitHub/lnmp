@@ -1,0 +1,38 @@
+version: '3'
+
+services:
+  nginx:
+    image: nginx:latest
+    container_name: nginx_latest
+    environment:
+      - TZ=Asia/Shanghai 
+    ports:
+      - 80:80
+    volumes:
+      - ./nginx/conf.d:/etc/nginx/conf.d
+      - ./nginx/log:/var/log/nginx
+      - /e/WWW:/usr/share/nginx/html
+
+  php-fpm:
+    image: php-fpm:7.3
+    container_name: php_fpm73
+    volumes:
+      - ./php-fpm/etc:/usr/local/etc
+      - /e/WWW:/usr/share/nginx/html
+    ports:
+      - 9000:9000
+    expose:
+      [9000]
+    command: "php-fpm"
+
+  mysql:
+    image: mysql:5.7
+    container_name: mysql57
+    environment:
+      - MYSQL_ROOT_PASSWORD=root
+
+  redis:
+    image: redis:latest
+    container_name: redis_latest
+    ports:
+      - "6379:6379"
