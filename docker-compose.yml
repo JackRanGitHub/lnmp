@@ -19,6 +19,7 @@ services:
     volumes:
       - ./php-fpm/etc:/usr/local/etc
       - /e/WWW:/usr/share/nginx/html
+      - ./php/bin/php:/usr/local/bin/php
     ports:
       - 9000:9000
     expose:
